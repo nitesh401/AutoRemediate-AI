@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+remediation:
+  workspace-root: ${REMEDIATION_WORKSPACE:./work}
+  max-attempts: 3            # per issue; the design caps this at 3
+  max-issues: 5
+  max-concurrent-jobs: 1
+  allow-local-repositories: true   # set false in shared/production deployments
+  api:
+    key: ${AUTOREMEDIATE_API_KEY:}  # when set, every /api/** call needs header X-API-Key
+  build:
+    command: [mvn, -B, -ntp, clean, verify]
+    timeout-seconds: 1800
+  sonar:
+    enabled: ${SONAR_ENABLED:false}
+    host-url: ${SONAR_HOST_URL:http://localhost:9000}
+    token: ${SONAR_TOKEN:}
+    project-key: ${SONAR_PROJECT_KEY:}      # default: <groupId>:<artifactId> from the root pom
+    project-key-suffix: -autoremediate       # scratch project, never pollutes the real project
+  snyk:
+    enabled: ${SNYK_ENABLED:false}
+    token: ${SNYK_TOKEN:}
+  ai:
+    provider: anthropic
+    model: ${AI_MODEL:claude-sonnet-5-5}     # configurable, never hardcoded in code
+    api-key: ${ANTHROPIC_API_KEY:}
+    base-url: ${ANTHROPIC_BASE_URL:https://api.anthropic.com}
+    # temperature: 0                         # optional; omitted from requests when unset
+    max-tokens: 4096
+  git:
+    push-enabled: ${GIT_PUSH_ENABLED:false}  # V1: PR creation only when explicitly enabled
+    token: ${GITHUB_TOKEN:}

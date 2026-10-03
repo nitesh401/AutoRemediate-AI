@@ -1,0 +1,19 @@
+# Local demo stack: AutoRemediate AI + a SonarQube Community server.
+# Run the container with limited resources and no production credentials: it executes repository build/test code.
+services:
+  sonarqube:
+    image: sonarqube:lts-community
+    ports: ["9000:9000"]
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+
+  autoremediate:
+    build: .
+    ports: ["8080:8080"]
+    env_file: [.env]
+    environment:
+      SONAR_HOST_URL: http://sonarqube:9000
+    volumes: ["./work:/work"]
+    mem_limit: 4g
+    cpus: 2
+    depends_on: [sonarqube]

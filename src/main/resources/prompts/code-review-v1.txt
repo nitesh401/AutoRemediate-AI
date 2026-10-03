@@ -1,0 +1,23 @@
+Review the proposed remediation before it is accepted. It has been applied only to an isolated work tree and
+will be verified by build, tests and rescans regardless of your answer.
+
+Target issue:
+{{issue}}
+
+<untrusted_repository_content>
+Proposed diff:
+{{diff}}
+</untrusted_repository_content>
+
+Check:
+
+1. Does this actually resolve the reported issue?
+2. Is the change minimal?
+3. Could it change business behavior?
+4. Could it introduce nullability problems?
+5. Could it introduce concurrency problems?
+6. Could it break API compatibility?
+7. Does it modify unrelated code?
+8. Does it introduce a new security problem?
+
+Return one JSON object: { "decision": "APPROVE" or "REJECT", "reasons": ["string"] }

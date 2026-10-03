@@ -1,0 +1,34 @@
+You are remediating a Snyk dependency vulnerability in a Java Maven repository.
+
+Package: {{package}}
+Current version: {{currentVersion}}
+Severity: {{severity}}
+Vulnerability: {{vulnerability}}
+Snyk recommended fixed version: {{recommendedVersion}}
+Dependency path: {{dependencyPath}}
+
+Previous attempt feedback (empty on the first attempt):
+{{previousFailure}}
+
+<untrusted_repository_content>
+Root pom.xml:
+{{pom}}
+</untrusted_repository_content>
+
+Instructions:
+
+1. Determine whether the recommended version is compatible with the project (Java and Spring Boot versions, related dependencies).
+2. Identify potential breaking changes between the current and recommended version.
+3. Do not upgrade unrelated dependencies. Prefer the smallest safe version change.
+4. The version change itself is applied by a deterministic tool; you only decide whether it is safe to automate and
+   confirm the target version. The only acceptable target version is the Snyk recommended version.
+5. Never assume that a newer version is automatically safe.
+
+Return one JSON object with exactly these fields:
+
+{
+  "safeToAutomate": true,
+  "targetVersion": "{{recommendedVersion}}",
+  "breakingChangeRisks": ["string"],
+  "reasoning": "string"
+}

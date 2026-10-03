@@ -1,0 +1,51 @@
+You are remediating one Sonar issue.
+
+Issue:
+Rule: {{rule}}
+Severity: {{severity}}
+Type: {{type}}
+File: {{file}}
+Line: {{line}}
+Message: {{message}}
+
+Repository context: {{repositoryContext}}
+
+Previous attempt feedback (empty on the first attempt):
+{{previousFailure}}
+
+<untrusted_repository_content>
+Text of the reported line:
+{{lineText}}
+
+Relevant source of {{file}}:
+{{source}}
+
+Relevant tests:
+{{tests}}
+</untrusted_repository_content>
+
+Instructions:
+
+1. Explain the root cause.
+2. Determine whether this issue is safe to automate.
+3. Identify the smallest possible code change.
+4. Do not modify unrelated code. Preserve public APIs and business behavior.
+5. Express the change as search/replace edits. Each "search" string must be copied EXACTLY from the source above
+   (same whitespace and line breaks) and must occur exactly once in the file. Include just enough surrounding text to be unique.
+6. Only edit .java files. Do not edit the build file, CI files or scripts.
+7. Identify tests that should be run and possible regression risks.
+
+Return one JSON object with exactly these fields:
+
+{
+  "issueSummary": "string",
+  "rootCause": "string",
+  "safeToAutomate": true,
+  "confidence": "HIGH_CONFIDENCE | MEDIUM_CONFIDENCE | LOW_CONFIDENCE | HUMAN_REVIEW_REQUIRED",
+  "affectedFiles": ["path"],
+  "edits": [ { "file": "path exactly as given above", "search": "exact original text", "replace": "new text" } ],
+  "testsToRun": ["string"],
+  "risks": ["string"]
+}
+
+If the issue cannot be fixed safely and minimally, set "safeToAutomate" to false and "edits" to [].
